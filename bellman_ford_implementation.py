@@ -1,8 +1,5 @@
 # -*- coding: utf-8 -*-
-"""
-SER501 Assignment 3 scaffolding code
-created by: Xiangyu Guo
-"""
+
 import sys
 
 
