@@ -5,7 +5,7 @@ import sys
 
 # =============================================================================
 
-def extract_min_prims(vertices_list, cost_at_vertex):
+def extract_min_prims(self, vertices_list, cost_at_vertex):
     # print("extract min called")
     min_cost = sys.maxsize
     min_vertex = ''
@@ -16,11 +16,12 @@ def extract_min_prims(vertices_list, cost_at_vertex):
                 min_cost = cost_at_vertex.get(vertex)
                 min_vertex = vertex
 
-    vertices_list.append(min_vertex)
-    return min_vertex, vertices_list
+    # vertices_list.append(min_vertex)
+    return min_vertex
 
 
 class Graph(object):
+    """docstring for Graph"""
     user_defined_vertices = []
     dfs_timer = 0
 
@@ -47,9 +48,10 @@ class Graph(object):
             print(v, self.matrix[i])
 
     def prim(self, root):
-        # ToDo
 
+        # to maintain the cost at each vertex
         cost_at_vertex = {}
+        # to maintain the parent for each vertex
         parent_at_vertex = {}
         for i, v in enumerate(self.vertices):
             cost_at_vertex.update({v: sys.maxsize})
@@ -61,7 +63,21 @@ class Graph(object):
         parent_at_vertex.update({current_vertex: ''})
 
         while len(vertices_list) != len(self.vertices):
-            current_vertex, vertices_list = extract_min_prims(vertices_list, cost_at_vertex)
+
+            # Generating output for print_d_and_pi
+            # ----------------------------------------------------------------------------
+            distance = []
+            parent_vertex = []
+            iteration = [len(vertices_list)]
+            for index, vertex in enumerate(parent_at_vertex):
+                parent_vertex.append(parent_at_vertex.get(vertex))
+                distance.append(cost_at_vertex.get(vertex))
+
+            self.print_d_and_pi(iteration, distance, parent_vertex)
+            # ----------------------------------------------------------------------------
+
+            current_vertex = extract_min_prims(self, vertices_list, cost_at_vertex)
+            vertices_list.append(current_vertex)
 
             # print(self.adj_dict.get(current_vertex))
             for each_vertex in self.adj_dict.get(current_vertex):
@@ -73,12 +89,17 @@ class Graph(object):
                     # Update parent
                     parent_at_vertex.update({each_vertex: current_vertex})
 
-        print('vertices visited')
-        print(vertices_list)
-        print('{child: parent}')
-        print(parent_at_vertex)
-        print('cost at each vertex')
-        print(cost_at_vertex)
+            # print(vertices_list)
+        # print(parent_at_vertex)
+        # print(cost_at_vertex)
+
+    def print_d_and_pi(self, iteration, d, pi):
+        assert ((len(d) == len(self.vertices)) and
+                (len(pi) == len(self.vertices)))
+
+        print("Iteration: {0}".format(iteration))
+        for i, v in enumerate(self.vertices):
+            print("Vertex: {0}\td: {1}\tpi: {2}".format(v, 'inf' if d[i] == sys.maxsize else d[i], pi[i]))
 
 
 def main():

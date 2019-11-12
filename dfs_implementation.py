@@ -3,22 +3,29 @@
 
 # =============================================================================
 
-def dfs_visit(v, vertex_color, self, discover):
+def dfs_visit(v, vertex_color, self, discovered):
     vertex_color.update({v: 'grey'})
     # print({v: 'grey'})
-    discover.append(v)
+
     self.dfs_timer += 1
+    # get start time for v
+    start = self.dfs_timer
+    # discovered.update({v: self.dfs_timer})
+
     vertices_for_v = self.adj_dict.get(v)
     # print(vertices_for_v)
     for each_vertex in vertices_for_v:
         if vertex_color.get(each_vertex) == 'white':
-            dfs_visit(each_vertex, vertex_color, self, discover)
+            dfs_visit(each_vertex, vertex_color, self, discovered)
     vertex_color.update({v: 'black'})
 
     # print({v: 'black'})
     self.dfs_timer += 1
+    # get finish time for v
+    finish = self.dfs_timer
+    discovered.update({v: (start, finish)})
 
-    return discover
+    return discovered
 
 
 class Graph(object):
@@ -35,7 +42,6 @@ class Graph(object):
         self.adj_dict = {}
 
         for edge in edges:
-            temp = {}
             x = vertices.index(edge[0])
             y = vertices.index(edge[1])
             self.matrix[x][y] = edge[2]
@@ -50,25 +56,47 @@ class Graph(object):
             print(v, self.matrix[i])
 
     def dfs_on_graph(self):
-
         # print(self.adj_dict)
         vertex_color = {}
+        # vertex_time_discover={}
         for i, v in enumerate(self.vertices):
             # print(v, self.matrix[i])
             vertex_color.update({v: 'white'})
         # print(vertex_color)
-        discover = []
+        discovered = {}
 
         for i, v in enumerate(self.vertices):
             if vertex_color.get(v) == 'white':
                 # print('white')
-                discover = dfs_visit(v, vertex_color, self, discover)
+                discovered = dfs_visit(v, vertex_color, self, discovered)
 
-        print('discovered in order')
-        print(discover)
+        # print('discovered in order')
+        # print(discovered)
         # print(finish)
         # for i, v in enumerate(self.vertices):
         #     print(v, vertex_color.get(v))
+
+        # Generating output for print_discover_and_finish_time
+        # ----------------------------------------------------------------------------
+
+        start = []
+        finish = []
+        # print(discovered.values())
+        for i, v in enumerate(self.vertices):
+            start.append(discovered.get(v)[0])
+            finish.append(discovered.get(v)[1])
+        self.print_discover_and_finish_time(start, finish)
+
+        # print discovered order
+        # print(discovered.keys())
+        # ----------------------------------------------------------------------------
+
+    def print_discover_and_finish_time(self, discover, finish):
+        assert ((len(discover) == len(self.vertices)) and
+                (len(finish) == len(self.vertices)))
+        for i, v in enumerate(self.vertices):
+            print("Vertex: {0}\tDiscovered: {1}\tFinished: {2}".format(
+                v, discover[i], finish[i]))
 
 
 def main():

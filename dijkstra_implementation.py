@@ -1,13 +1,12 @@
 # -*- coding: utf-8 -*-
 
-from collections import deque
 import sys
 
 
 # =============================================================================
 
-def extract_min_dijkstra(vertex_traversal_details):
-    print("checking min vertex...")
+def extract_min_dijkstra(vertex_traversal_details, vertices_list):
+    # print("extract min called")
     min_cost = sys.maxsize
     min_vertex = ''
     for i, vertex in enumerate(vertex_traversal_details):
@@ -17,7 +16,7 @@ def extract_min_dijkstra(vertex_traversal_details):
                 min_cost = vertex_traversal_details.get(vertex)[1]
                 min_vertex = vertex
 
-    print('min vertex selected', min_vertex)
+    # print('min vertex', min_vertex)
     vertex_traversal_details.get(min_vertex)[0] = True
     return min_vertex
 
@@ -48,7 +47,7 @@ class Graph(object):
             print(v, self.matrix[i])
 
     def dijkstra(self, source):
-        # ToDo
+        # print("implemented yet!")
 
         vertex_traversal_details = {}
         # for vertex_traversal_details --> 0:visited; 1:Distance from source; 2:Immediate parent
@@ -57,15 +56,27 @@ class Graph(object):
 
         # Update cost for source
         vertex_traversal_details.get(source)[1] = 0
-        current_vertex = source
+
         vertices_list = []
         while len(vertices_list) != len(self.vertices):
 
-            current_vertex = extract_min_dijkstra(vertex_traversal_details)
+            # Generating output for print_d_and_pi
+            # ----------------------------------------------------------------------------
+            distance = []
+            parent_vertex = []
+            iteration = [len(vertices_list)]
+            for index, vertex in enumerate(vertex_traversal_details):
+                parent_vertex.append(vertex_traversal_details.get(vertex)[2])
+                distance.append(vertex_traversal_details.get(vertex)[1])
+
+            self.print_d_and_pi(iteration, distance, parent_vertex)
+            # ----------------------------------------------------------------------------
+
+            current_vertex = extract_min_dijkstra(vertex_traversal_details, vertices_list)
             vertices_list.append(current_vertex)
 
             # for vertex_traversal_details --> 0:visited; 1:Distance from source; 2:Immediate parent
-            # for all adj vertices
+            # iterate through all adjacent vertices
             for each_vertex in self.adj_dict.get(current_vertex):
                 # print(each_vertex)
                 cost_from_edge = self.matrix[self.vertices.index(current_vertex)][self.vertices.index(each_vertex)]
@@ -79,13 +90,22 @@ class Graph(object):
                     # Update parent
                     vertex_traversal_details.get(each_vertex)[2] = current_vertex
 
-        print('vertices traversed', vertices_list)
-        print('vertex', '[visited, cost, parent]')
-        for i, vertex in enumerate(vertex_traversal_details):
-            print(vertex, vertex_traversal_details.get(vertex))
+        # print(vertices_list)
+        # for i, vertex in enumerate(vertex_traversal_details):
+        #     print(vertex, vertex_traversal_details.get(vertex))
+
+    def print_d_and_pi(self, iteration, d, pi):
+        assert ((len(d) == len(self.vertices)) and
+                (len(pi) == len(self.vertices)))
+
+        print("Iteration: {0}".format(iteration))
+        for i, v in enumerate(self.vertices):
+            print("Vertex: {0}\td: {1}\tpi: {2}".format(v, 'inf' if d[i] == sys.maxsize else d[i], pi[i]))
 
 
 def main():
+    # Thoroughly test your program and produce useful output.
+
     graph = Graph(['s', 't', 'x', 'y', 'z'],
                   [('s', 't', 3),
                    ('s', 'y', 5),
