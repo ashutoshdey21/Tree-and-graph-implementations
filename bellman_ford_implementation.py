@@ -41,8 +41,7 @@ class Graph(object):
             print(v, self.matrix[i])
 
     def bellman_ford(self, source):
-        print("implemented yet!")
-
+        print('executing bellman ford')
         vertex_traversal_details = {}
         # visited_list = []
         # for vertex_traversal_details --> 0:Distance from source; 1:Immediate parent
@@ -82,16 +81,18 @@ class Graph(object):
                 print('no solution')
                 break
 
-        # print(vertex_traversal_details)
+        # Generating final to show the change in output for print_d_and_pi
+        # ----------------------------------------------------------------------------
+        distance = []
+        parent_vertex = []
+        iteration = [i]
+        for index, vertex in enumerate(vertex_traversal_details):
+            parent_vertex.append(vertex_traversal_details.get(vertex)[1])
+            distance.append(vertex_traversal_details.get(vertex)[0])
 
-        # # Generating output for print_d_and_pi
-        # distance = []
-        # parent_vertex = []
-        # iteration = []
-        # for i, vertex in enumerate(vertex_traversal_details):
-        #     iteration.append(i)
-        #     parent_vertex.append(vertex_traversal_details.get(vertex)[1])
-        #     distance.append(vertex_traversal_details.get(vertex)[0])
+        self.print_d_and_pi(iteration, distance, parent_vertex)
+        # ----------------------------------------------------------------------------
+        # print(vertex_traversal_details)
         #
         # self.print_d_and_pi(iteration, distance, parent_vertex)
 
