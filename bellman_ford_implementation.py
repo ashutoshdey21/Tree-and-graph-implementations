@@ -72,7 +72,7 @@ class Graph(object):
                 # relaxation
                 vertex_traversal_details = relax_bellman_ford(u, v, weight_u_v, vertex_traversal_details)
 
-        # test for solution
+        # main for solution
         for edge in self.edges:
             u = edge[0]
             v = edge[1]
@@ -106,7 +106,7 @@ class Graph(object):
 
 
 def main():
-    # Thoroughly test your program and produce useful output.
+    # Thoroughly main your program and produce useful output.
 
     # Q5
     graph = Graph(['s', 't', 'x', 'y', 'z'],

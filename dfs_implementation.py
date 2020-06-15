@@ -100,7 +100,7 @@ class Graph(object):
 
 
 def main():
-    # Thoroughly test your program and produce useful output.
+    # Thoroughly main your program and produce useful output.
 
     graph = Graph(['q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z'],
                   [('q', 's', 1),

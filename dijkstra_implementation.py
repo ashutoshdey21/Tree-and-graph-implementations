@@ -104,7 +104,7 @@ class Graph(object):
 
 
 def main():
-    # Thoroughly test your program and produce useful output.
+    # Thoroughly main your program and produce useful output.
 
     graph = Graph(['s', 't', 'x', 'y', 'z'],
                   [('s', 't', 3),
